@@ -1,3 +1,6 @@
+import thaumcraft.aspect.CTAspectStack;
+
+
 //gold coins have a value of 2000, diamonds are 50
 //array is:
 //common: 0
@@ -27,3 +30,17 @@ mods.thaumcraft.Crucible.registerRecipe("crucibleTest", "", <minecraft:diamond>,
 mods.thaumcraft.Crucible.removeRecipe(<minecraft:leather>);
 
 <entity:minecraft:sheep>.setAspects(<aspect:aqua>);
+
+if (<minecraft:dirt>.hasAspects())
+{
+	print ("Dirt has aspects!");
+}
+else
+{
+	print ("Dirt doesn't have aspects?!");
+}
+
+for aStack in <minecraft:dirt>.getAspects()
+{
+	print(aStack.internal.name + " * " + aStack.amount);
+}

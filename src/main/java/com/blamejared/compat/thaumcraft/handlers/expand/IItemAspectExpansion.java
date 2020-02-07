@@ -1,6 +1,7 @@
 package com.blamejared.compat.thaumcraft.handlers.expand;
 
 import com.blamejared.ModTweaker;
+import com.blamejared.compat.thaumcraft.handlers.aspects.CTAspect;
 import com.blamejared.compat.thaumcraft.handlers.aspects.CTAspectStack;
 import com.blamejared.mtlib.helpers.*;
 import com.blamejared.mtlib.utils.BaseAction;
@@ -8,7 +9,9 @@ import crafttweaker.annotations.*;
 import crafttweaker.api.item.IItemStack;
 import stanhebben.zenscript.annotations.*;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectHelper;
 
 import java.util.*;
 
@@ -45,7 +48,34 @@ public class IItemAspectExpansion {
         });
         
     }
+	
+	@ZenMethod
+	public static boolean hasAspects(IItemStack stack)
+	{
+		final AspectList check = AspectHelper.getObjectAspects(InputHelper.toStack(stack));
+		
+		if (check == null)
+			return false;
+		
+		return (check.getAspects().length > 0);
+	}
     
+	@ZenMethod
+	public static CTAspectStack[] getAspects(IItemStack stack)
+	{
+		final AspectList list = new AspectList(InputHelper.toStack(stack));
+		final Aspect[] tcArray = list.getAspects();
+		final int len = tcArray.length;
+		final CTAspectStack[] result = new CTAspectStack[len];
+		
+		for (int i = 0; i < len; i++)
+		{
+			final Aspect aspect = tcArray[i];
+			result[i] = new CTAspectStack(new CTAspect(aspect), list.getAmount(aspect));
+		}
+		
+		return result;
+	}
     
     @ZenMethod
     public static void removeAspects(IItemStack stack, CTAspectStack... aspects) {
